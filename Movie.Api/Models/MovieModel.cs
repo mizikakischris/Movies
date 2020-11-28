@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Movie.Api.Models
 {
-    public class Movie
+    public class MovieModel
     {
         [Key]
         public int Id { get; set; }
