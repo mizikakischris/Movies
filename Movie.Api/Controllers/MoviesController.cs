@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Movie.Api.Dtos;
+using Movie.Api.Models;
 using Movie.Api.Repository.IRepository;
 
 namespace Movie.Api.Controllers
@@ -41,7 +42,7 @@ namespace Movie.Api.Controllers
         }
 
      
-        [HttpGet("{movieId:int}")]
+        [HttpGet("{movieId:int}", Name = "GetMovie")]
         public IActionResult GetMovie(int movieId)
         {
             var movie = _repo.GetMovieModel(movieId);
@@ -52,6 +53,27 @@ namespace Movie.Api.Controllers
 
             var movieDto = _mapper.Map<MovieDto>(movie);
             return Ok(movieDto);
+        }
+
+        [HttpPost]
+        public IActionResult CreateMovie([FromBody] MovieDto movieDto)
+        {
+            if (movieDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_repo.MovieModelExists(movieDto.Name))
+            {
+                ModelState.AddModelError("", "Movie Exists!");
+                return StatusCode(404, ModelState);
+            }
+            var movieObj = _mapper.Map<MovieModel>(movieDto);
+            if (!_repo.CreateMovieModel(movieObj))
+            {
+                ModelState.AddModelError("", $"Something went wrong when saving the record {movieObj.Name}");
+                return StatusCode(500, ModelState);
+            }
+            return CreatedAtRoute("GetMovie", new { movieId = movieObj.Id }, movieObj);
         }
     }
 }
