@@ -6,7 +6,9 @@ namespace Movie.Api.Dtos
 {
     [DataContract]
     public class MovieDto
-    { 
+    {
+       // [Required]
+        [DataMember(Name = "Id")]
         public int Id { get; set; }
         [Required]
         [DataMember(Name = "Name")]

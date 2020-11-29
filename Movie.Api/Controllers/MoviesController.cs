@@ -75,5 +75,44 @@ namespace Movie.Api.Controllers
             }
             return CreatedAtRoute("GetMovie", new { movieId = movieObj.Id }, movieObj);
         }
+
+        [HttpPatch("{movieId:int}", Name = "UpdateMovie")]
+        public IActionResult UpdateMovie(int movieId, [FromBody] MovieDto movieDto)
+        {
+            if (movieDto == null || movieId != movieDto.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var movieObj = _mapper.Map<MovieModel>(movieDto);
+            if (!_repo.UpdateMovieModel(movieObj))
+            {
+                ModelState.AddModelError("", $"Something went wrong when updating the record {movieObj.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+
+        }
+
+
+        [HttpDelete("{movieId:int}", Name = "DeleteMovie")]
+        public IActionResult DeleteMovie(int movieId)
+        {
+            if (!_repo.MovieModelExists(movieId))
+            {
+                return NotFound();
+            }
+
+            var movieObj = _repo.GetMovieModel(movieId);
+            if (!_repo.DeleteMovieModel(movieObj))
+            {
+                ModelState.AddModelError("", $"Something went wrong when deleting the record {movieObj.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+
+        }
     }
 }
