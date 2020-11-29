@@ -10,8 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Movie.Api.Data;
+using Movie.Api.Repository;
+using Movie.Api.Repository.IRepository;
 
 namespace Movie.Api
 {
@@ -29,6 +30,8 @@ namespace Movie.Api
         {
             services.AddDbContext<AppDbContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IMovieModelRepository, MovieModelRepository>();
             services.AddControllers();
         }
 
