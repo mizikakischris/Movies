@@ -40,6 +40,18 @@ namespace Movie.Api.Controllers
             return Ok(movieDtos);
         }
 
-      
+     
+        [HttpGet("{movieId:int}")]
+        public IActionResult GetMovie(int movieId)
+        {
+            var movie = _repo.GetMovieModel(movieId);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var movieDto = _mapper.Map<MovieDto>(movie);
+            return Ok(movieDto);
+        }
     }
 }
