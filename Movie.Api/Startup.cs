@@ -11,10 +11,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Movie.Api.Controllers;
 using Movie.Api.Data;
 using Movie.Api.MovieMapper;
 using Movie.Api.Repository;
 using Movie.Api.Repository.IRepository;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Movie.Api
 {
@@ -35,9 +39,28 @@ namespace Movie.Api
 
             services.AddScoped<IMovieModelRepository, MovieModelRepository>();
             services.AddAutoMapper(typeof(MovieMappings));
-            services.AddControllers();
+
+            RegisterControllers(services);
         }
 
+        private void RegisterControllers(IServiceCollection services)
+        {
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.Converters = new List<JsonConverter>
+                {
+                    new StringEnumConverter
+                    {
+                        AllowIntegerValues = false
+                    }
+                };
+
+                if (options.SerializerSettings.ContractResolver is DefaultContractResolver resolver)
+                    resolver.NamingStrategy = null;
+            })
+            .AddApplicationPart(typeof(MoviesController).Assembly);
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
