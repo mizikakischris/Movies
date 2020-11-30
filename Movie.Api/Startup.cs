@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,8 +40,19 @@ namespace Movie.Api
 
             services.AddScoped<IMovieModelRepository, MovieModelRepository>();
             services.AddAutoMapper(typeof(MovieMappings));
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("movieapispec",
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title = "Movie API",
+                        Version = "1",
+                        Description = "Movie API"
+                    });
+            });
 
-            RegisterControllers(services);
+
+                RegisterControllers(services);
         }
 
         private void RegisterControllers(IServiceCollection services)
@@ -68,9 +80,16 @@ namespace Movie.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+        
+          
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(options => { 
 
+               options.SwaggerEndpoint("/swagger/movieapispec/swagger.json", "Movie API");
+                     
+                options.RoutePrefix = "";
+            });
             app.UseRouting();
 
             app.UseAuthorization();
