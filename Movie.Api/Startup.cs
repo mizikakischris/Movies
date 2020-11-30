@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -49,10 +51,11 @@ namespace Movie.Api
                         Version = "1",
                         Description = "Movie API"
                     });
+                var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+                options.IncludeXmlComments(cmlCommentsFullPath);
             });
-
-
-                RegisterControllers(services);
+            RegisterControllers(services);
         }
 
         private void RegisterControllers(IServiceCollection services)

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Movie.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Movie.Api.Controllers.MoviesController.GetMovies">
+            <summary>
+            Get list of movies.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.MoviesController.GetMovie(System.Int32)">
+            <summary>
+            Get individual movie
+            </summary>
+            <param name="movieId"> The Id of the movie </param>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.MoviesController.CreateMovie(Movie.Api.Dtos.MovieDto)">
+            <summary>
+            create movie
+            </summary>
+            <param name="movieDto"> The Dto movie </param>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.MoviesController.UpdateMovie(System.Int32,Movie.Api.Dtos.MovieDto)">
+            <summary>
+            Update individual movie
+            </summary>
+            <param name="movieId"> The Id of the movie </param>
+            <param name="movieDto"> The Dto movie </param>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.MoviesController.DeleteMovie(System.Int32)">
+            <summary>
+            Delete individual movie
+            </summary>
+            <param name="movieId"> The Id of the movie </param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
