@@ -36,12 +36,27 @@ namespace Movie.Api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+        { 
+            RegisterGenericServices(services);
+            RegisterApiServices(services);
+            RegisterSwagger(services);
+            RegisterControllers(services);
+        }
+
+        private void RegisterGenericServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddScoped<IMovieModelRepository, MovieModelRepository>();
             services.AddAutoMapper(typeof(MovieMappings));
+        }
+
+        private void RegisterApiServices(IServiceCollection services)
+        {
+            services.AddScoped<IMovieModelRepository, MovieModelRepository>();
+        }
+
+        private void RegisterSwagger(IServiceCollection services)
+        {
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("movieapispec",
@@ -55,9 +70,7 @@ namespace Movie.Api
                 var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
                 options.IncludeXmlComments(cmlCommentsFullPath);
             });
-            RegisterControllers(services);
         }
-
         private void RegisterControllers(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson(options =>
