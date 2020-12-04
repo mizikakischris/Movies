@@ -1,27 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Movie.Api.Controllers;
-using Movie.Api.Data;
 using Movie.Api.MovieMapper;
-using Movie.Api.Repository;
-using Movie.Api.Repository.IRepository;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using NLog;
+using Movie.Services;
+using Movie.Interfaces;
+using Movie.Repository;
+using Movie.Repository.Data;
 
 namespace Movie.Api
 {
@@ -47,12 +44,14 @@ namespace Movie.Api
         {
             services.AddDbContext<AppDbContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+           // services.AddScoped<ILogger, Logger>();
             services.AddAutoMapper(typeof(MovieMappings));
         }
 
         private void RegisterApiServices(IServiceCollection services)
         {
-            services.AddScoped<IMovieModelRepository, MovieModelRepository>();
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IMovieRepositoryService, MovieModelRepository>();
         }
 
         private void RegisterSwagger(IServiceCollection services)

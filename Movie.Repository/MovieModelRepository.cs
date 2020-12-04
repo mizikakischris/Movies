@@ -1,12 +1,12 @@
-﻿using Movie.Api.Data;
-using Movie.Api.Models;
-using Movie.Api.Repository.IRepository;
+﻿using Movie.Interfaces;
+using Movie.Repository.Data;
+using Movie.Types.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Movie.Api.Repository
+namespace Movie.Repository
 {
-    public class MovieModelRepository : IMovieModelRepository
+    public class MovieModelRepository : IMovieRepositoryService
     {
         private readonly AppDbContext _db;
 

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Movie.Api.Dtos;
-using Movie.Api.Models;
-using Movie.Api.Repository.IRepository;
+using Movie.Types.Dtos;
+using Movie.Api.Exceptions;
+using Movie.Types.Models;
+using Movie.Interfaces;
+using Movie.Types.Responses;
+using AutoMapper;
 
 namespace Movie.Api.Controllers
 {
@@ -16,12 +15,11 @@ namespace Movie.Api.Controllers
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class MoviesController : ControllerBase
     {
-        private readonly IMovieModelRepository _repo;
-        private readonly IMapper _mapper;
-
-        public MoviesController(IMovieModelRepository repo, IMapper mapper)
+        private readonly IMovieService _service;
+           private readonly IMapper _mapper;
+        public MoviesController(IMovieService service, IMapper mapper )
         {
-            _repo = repo;
+            _service = service;
             _mapper = mapper;
         }
 
@@ -32,15 +30,18 @@ namespace Movie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(List<MovieDto>))]
-        public IActionResult GetMovies()
+        public ActionResult<Response<MovieDto>> GetMovies()
         {
-            var moviesList = _repo.GetMovies();
-            var movieDtos = new List<MovieDto>();
-            foreach (var movie in moviesList)
+            var moviesList = _service.GetMovies();
+
+            Response<MovieDto> response = new Response<MovieDto>
             {
-                movieDtos.Add(_mapper.Map<MovieDto>(movie));
-            }
-            return Ok(movieDtos);
+                Payload = new Payload<MovieDto>
+                {
+                    movies = moviesList
+                }
+            };
+            return Ok(response);
         }
 
         /// <summary>
@@ -51,16 +52,41 @@ namespace Movie.Api.Controllers
         [HttpGet("{movieId:int}", Name = "GetMovie")]
         [ProducesResponseType(200, Type = typeof(MovieDto))]
         [ProducesResponseType(404)]
-        public IActionResult GetMovie(int movieId)
+        public ActionResult<Response<MovieDto>> GetMovie(int movieId)
         {
-            var movie = _repo.GetMovieModel(movieId);
-            if (movie == null)
+            try
             {
-                return NotFound();
+
+                var movie = _service.GetMovieModel(movieId);
+                if (movie == null)
+                {
+                    throw new ErrorDetails
+                    {
+                        Description = $"Not found item with Id {movieId}",
+                        StatusCode = StatusCodes.Status404NotFound,
+                    };
+
+                }
+
+                Response<MovieDto> response = new Response<MovieDto>
+                {
+
+                    Payload = new Payload<MovieDto> { movie = movie }
+                };
+                return Ok(response);
+
+
+            }
+            catch (ErrorDetails ex)
+            {
+                Response<MovieDto> response = new Response<MovieDto>
+                {
+                    Payload = null,
+                    Exception = ex
+                };
+                return response;
             }
 
-            var movieDto = _mapper.Map<MovieDto>(movie);
-            return Ok(movieDto);
         }
 
         /// <summary>
@@ -73,24 +99,39 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateMovie([FromBody] MovieDto movieDto)
+        public ActionResult<Response<MovieDto>> CreateMovie([FromBody] MovieDto movieDto)
         {
             if (movieDto == null)
             {
                 return BadRequest(ModelState);
             }
-            if (_repo.MovieModelExists(movieDto.Name))
+            if (_service.MovieModelExists(movieDto.Name))
             {
-                ModelState.AddModelError("", "Movie Exists!");
-                return StatusCode(404, ModelState);
+                //ModelState.AddModelError("", "Movie Exists!");
+                //return StatusCode(404, ModelState);
+                throw new ErrorDetails
+                {
+                    StatusCode = 404,
+                    Description = "Movie Exists..!"
+                };
             }
-            var movieObj = _mapper.Map<MovieModel>(movieDto);
-            if (!_repo.CreateMovieModel(movieObj))
+            var movieModel = _service.CreateMovieModel(movieDto);
+            Response<MovieDto> response = new Response<MovieDto>
             {
-                ModelState.AddModelError("", $"Something went wrong when saving the record {movieObj.Name}");
-                return StatusCode(500, ModelState);
-            }
-            return CreatedAtRoute("GetMovie", new { movieId = movieObj.Id }, movieObj);
+
+                Payload = new Payload<MovieDto>
+                {
+                    movie = new MovieDto
+                    {
+                        BoxOffice = movieModel.BoxOffice,
+                        Id = movieModel.Id,
+                        Name = movieModel.Name,
+                        Picture = movieModel.Picture,
+                        ReleaseDate = movieModel.ReleaseDate
+                    }
+                }
+            };
+            return CreatedAtRoute("GetMovie", new { movieId = movieModel.Id }, response);
         }
 
         /// <summary>
@@ -111,7 +152,7 @@ namespace Movie.Api.Controllers
             }
 
             var movieObj = _mapper.Map<MovieModel>(movieDto);
-            if (!_repo.UpdateMovieModel(movieObj))
+            if (!_service.UpdateMovieModel(movieObj))
             {
                 ModelState.AddModelError("", $"Something went wrong when updating the record {movieObj.Name}");
                 return StatusCode(500, ModelState);
@@ -133,13 +174,13 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DeleteMovie(int movieId)
         {
-            if (!_repo.MovieModelExists(movieId))
+            if (!_service.MovieModelExists(movieId))
             {
                 return NotFound();
             }
 
-            var movieObj = _repo.GetMovieModel(movieId);
-            if (!_repo.DeleteMovieModel(movieObj))
+            var movieObj = _service.GetTheMovieModel(movieId);
+            if (!_service.DeleteMovieModel(movieObj))
             {
                 ModelState.AddModelError("", $"Something went wrong when deleting the record {movieObj.Name}");
                 return StatusCode(500, ModelState);

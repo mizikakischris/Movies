@@ -2,25 +2,25 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace Movie.Api.Dtos
+namespace Movie.Types.Dtos
 {
     [DataContract]
     public class MovieDto
     {
        // [Required]
-        [DataMember(Name = "Id")]
+        [DataMember(Name = "id")]
         public int Id { get; set; }
         [Required]
-        [DataMember(Name = "Name")]
+        [DataMember(Name = "name")]
         public string Name { get; set; }
         
         [Required]
-        [DataMember(Name ="Release Date")]
+        [DataMember(Name ="release date")]
         public DateTime ReleaseDate{ get; set; }
         [Required]
-        [DataMember(Name = "Box Office")]
+        [DataMember(Name = "box office")]
         public decimal BoxOffice { get; set; }
-        [DataMember(Name = "Picture")]
+        [DataMember(Name = "picture")]
         public byte[] Picture { get; set; }
     }
 }

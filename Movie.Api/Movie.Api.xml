@@ -17,14 +17,14 @@
             <param name="movieId"> The Id of the movie </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.MoviesController.CreateMovie(Movie.Api.Dtos.MovieDto)">
+        <member name="M:Movie.Api.Controllers.MoviesController.CreateMovie(Movie.Types.Dtos.MovieDto)">
             <summary>
             create movie
             </summary>
             <param name="movieDto"> The Dto movie </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.MoviesController.UpdateMovie(System.Int32,Movie.Api.Dtos.MovieDto)">
+        <member name="M:Movie.Api.Controllers.MoviesController.UpdateMovie(System.Int32,Movie.Types.Dtos.MovieDto)">
             <summary>
             Update individual movie
             </summary>

@@ -1,9 +1,9 @@
-﻿using Movie.Api.Models;
+﻿using Movie.Types.Models;
 using System.Collections.Generic;
 
-namespace Movie.Api.Repository.IRepository
+namespace Movie.Interfaces
 {
-    public interface IMovieModelRepository
+    public interface IMovieRepositoryService
     {
         ICollection<MovieModel> GetMovies();
         MovieModel GetMovieModel(int movieId);
