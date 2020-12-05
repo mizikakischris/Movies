@@ -4,6 +4,41 @@
         <name>Movie.Api</name>
     </assembly>
     <members>
+        <member name="M:Movie.Api.Controllers.ActorController.GetActors">
+            <summary>
+            Get list of actors.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.ActorController.GetActor(System.Int32)">
+            <summary>
+            Get individual actor
+            </summary>
+            <param name="actorId"> The Id of the actor </param>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.ActorController.CreateMovie(Movie.Types.Dtos.ActorDto)">
+            <summary>
+            create actor
+            </summary>
+            <param name="movieDto"> The Dto movie </param>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.ActorController.UpdateActor(System.Int32,Movie.Types.Dtos.ActorDto)">
+            <summary>
+            Update actor 
+            </summary>
+            <param name="actorId"> The Id of the actor </param>
+            <param name="actorDto"> The Dto actor </param>
+            <returns></returns>
+        </member>
+        <member name="M:Movie.Api.Controllers.ActorController.DeleteActor(System.Int32)">
+            <summary>
+            Delete individual actor
+            </summary>
+            <param name="actorId"> The Id of the actor </param>
+            <returns></returns>
+        </member>
         <member name="M:Movie.Api.Controllers.MoviesController.GetMovies">
             <summary>
             Get list of movies.

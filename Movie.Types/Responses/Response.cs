@@ -21,8 +21,8 @@ namespace Movie.Types.Responses
    
     public class Payload<T> where T: class
     {
-      public  T movie;
-      public List<T> movies;
+      public  T PayloadObject;
+      public List<T> PayloadObjects;
         
     }
 }

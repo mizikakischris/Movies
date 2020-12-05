@@ -17,5 +17,7 @@ namespace Movie.Interfaces
         bool Save();
 
         MovieModel GetTheMovieModel(int movieId);
+
+        List<MovieDto> GetMoviesByActor(int actorId);
     }
 }

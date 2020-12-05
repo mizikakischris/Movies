@@ -38,7 +38,7 @@ namespace Movie.Api.Controllers
             {
                 Payload = new Payload<MovieDto>
                 {
-                    movies = moviesList
+                    PayloadObjects = moviesList
                 }
             };
             return Ok(response);
@@ -71,7 +71,7 @@ namespace Movie.Api.Controllers
                 Response<MovieDto> response = new Response<MovieDto>
                 {
 
-                    Payload = new Payload<MovieDto> { movie = movie }
+                    Payload = new Payload<MovieDto> { PayloadObject = movie }
                 };
                 return Ok(response);
 
@@ -86,6 +86,51 @@ namespace Movie.Api.Controllers
                 };
                 return response;
             }
+
+        }
+
+        [HttpGet("[action]/{movieId:int}")]
+        [ProducesResponseType(200, Type = typeof(MovieDto))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public ActionResult<Response<MovieDto>> GetMoviesByActor(int actorId)
+        {
+            try
+            {
+                var movieModels = _service.GetMoviesByActor(actorId);
+                if (movieModels == null)
+                {
+                    throw new ErrorDetails
+                    {
+                        Description = $"Movies Not found for Id {actorId}",
+                        StatusCode = StatusCodes.Status404NotFound,
+                    };
+                }
+                var movieDtos = new List<MovieDto>();
+                foreach (var movie in movieModels)
+                {
+                    movieDtos.Add(_mapper.Map<MovieDto>(movie));
+                }
+                Response<MovieDto> response = new Response<MovieDto>
+                {
+                    Payload = new Payload<MovieDto>
+                    {
+                        PayloadObjects = movieDtos
+                    }
+                };
+                return Ok(response);
+            }
+            catch (ErrorDetails ex)
+            {
+
+                Response<MovieDto> response = new Response<MovieDto>
+                {
+                    Payload = null,
+                    Exception = ex
+                };
+                return response;
+            }
+           
 
         }
 
@@ -121,7 +166,7 @@ namespace Movie.Api.Controllers
 
                 Payload = new Payload<MovieDto>
                 {
-                    movie = new MovieDto
+                    PayloadObject = new MovieDto
                     {
                         BoxOffice = movieModel.BoxOffice,
                         Id = movieModel.Id,

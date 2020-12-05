@@ -80,6 +80,18 @@ namespace Movie.Services
         {
             return _repo.UpdateMovieModel(movie);
         }
+
+        public List<MovieDto> GetMoviesByActor(int actorId)
+        {
+            var moviesList = _repo.GetMoviesByActor(actorId);
+            var movieDtos = new List<MovieDto>();
+            foreach (var movie in moviesList)
+            {
+                movieDtos.Add(_mapper.Map<MovieDto>(movie));
+            }
+
+            return movieDtos;
+        }
     }
 
     

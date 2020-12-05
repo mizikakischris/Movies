@@ -13,6 +13,7 @@ namespace Movie.Types.Dtos
         public int Id { get; set; }
 
         [Required]
+        [DataMember]
         public string Name { get; set; }
 
         [Required]
