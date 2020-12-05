@@ -1,4 +1,5 @@
-﻿using Movie.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Movie.Interfaces;
 using Movie.Repository.Data;
 using Movie.Types.Models;
 using System.Collections.Generic;
@@ -35,6 +36,12 @@ namespace Movie.Repository
         public ICollection<MovieModel> GetMovies()
         {
             return _db.Movies.OrderBy(m=> m.Name).ToList();
+        }
+
+        public List<MovieModel> GetMoviesByActor(int actorId)
+        {
+            var movies = _db.Movies.Include(x => x.Actor).Where(a => a.Actor.Id == actorId).ToList();
+            return movies;
         }
 
         public bool  MovieModelExists(string name)

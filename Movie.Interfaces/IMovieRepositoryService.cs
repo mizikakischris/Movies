@@ -12,6 +12,7 @@ namespace Movie.Interfaces
         bool CreateMovieModel(MovieModel movie);
         bool UpdateMovieModel(MovieModel movie);
         bool DeleteMovieModel(MovieModel movie);
+        List<MovieModel> GetMoviesByActor(int actorId);
         bool Save();
     }
 }

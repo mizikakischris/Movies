@@ -13,5 +13,7 @@ namespace Movie.Repository.Data
         public DbSet<MovieModel> Movies { get; set; }
 
         public DbSet<Actor> Actors { get; set; }
+
+        public DbSet<Hero> Heroes { get; set; }
     }
 }
