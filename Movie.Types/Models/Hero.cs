@@ -1,30 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace Movie.Types.Models
 {
-    public class MovieModel
+   [Table("Heroes")]
+   public  class Hero
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
-
-        [Required]
-        [Display(Name ="Release Date")]
-        public DateTime ReleaseDate{ get; set; }
-
-        [Required]
-        [Display(Name = "Box Office")]
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal BoxOffice { get; set; }
-
         public byte[] Picture { get; set; }
 
+        public int ActorId { get; set; }
 
-       // [ForeignKey("Actor")]
         public Actor Actor { get; set; }
     }
 }
