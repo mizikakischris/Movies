@@ -1,4 +1,5 @@
-﻿using Movie.Types.Models;
+﻿using Movie.Types.Dtos;
+using Movie.Types.Models;
 using System.Collections.Generic;
 
 namespace Movie.Interfaces
@@ -13,6 +14,8 @@ namespace Movie.Interfaces
         bool UpdateMovieModel(MovieModel movie);
         bool DeleteMovieModel(MovieModel movie);
         List<MovieModel> GetMoviesByActor(int actorId);
+
+        List<Actor> GetActorsByMovie(int movieId);
         bool Save();
     }
 }

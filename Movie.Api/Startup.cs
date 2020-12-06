@@ -42,6 +42,7 @@ namespace Movie.Api
 
         private void RegisterGenericServices(IServiceCollection services)
         {
+            services.AddMvc();
             services.AddDbContext<AppDbContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
            // services.AddScoped<ILogger, Logger>();
@@ -84,6 +85,9 @@ namespace Movie.Api
                         AllowIntegerValues = false
                     }
                 };
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+
 
                 if (options.SerializerSettings.ContractResolver is DefaultContractResolver resolver)
                     resolver.NamingStrategy = null;

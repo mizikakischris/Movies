@@ -146,7 +146,7 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Response<MovieDto>> CreateMovie([FromBody] MovieDto movieDto, List<int> actorIds)
+        public ActionResult<Response<MovieDto>> CreateMovie([FromBody] MovieDto movieDto,[FromQuery] List<int> actorIds)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace Movie.Api.Controllers
                         {
                             BoxOffice = movieModel.BoxOffice,
                             Id = movieModel.Id,
-                            Name = movieModel.Title,
+                            Title = movieModel.Title,
                             Picture = movieModel.Picture,
                             ReleaseDate = movieModel.ReleaseDate.Value
                         }
@@ -247,7 +247,7 @@ namespace Movie.Api.Controllers
             }
 
 
-            if (_service.MovieModelExists(movie.Name))
+            if (_service.MovieModelExists(movie.Title))
             {
                 throw new ErrorDetails
                 {

@@ -11,11 +11,13 @@ namespace Movie.Services
     {
 
         private readonly IMovieRepositoryService _repo;
+        private readonly IActorRepositoryService _actorRepo;
         private readonly IMapper _mapper;
-        public MovieService(IMovieRepositoryService repo, IMapper mapper)
+        public MovieService(IMovieRepositoryService repo, IMapper mapper, IActorRepositoryService actorRepo)
         {
             _repo = repo;
             _mapper = mapper;
+            _actorRepo = actorRepo;
         }
         public MovieModel CreateMovieModel(MovieDto movieDto, List<int> actorIds)
         {
@@ -53,10 +55,27 @@ namespace Movie.Services
         public List<MovieDto> GetMovies()
         {
             var moviesList =  _repo.GetMovies();
-            var movieDtos = new List<MovieDto>();
+            //With movie Id I get the actors when swarching the movieActors table
+            Dictionary<int, List<ActorDto>> dict = new Dictionary<int, List<ActorDto>>();
             foreach (var movie in moviesList)
             {
-                movieDtos.Add(_mapper.Map<MovieDto>(movie));
+                var actorDtos = GetActorsByMovie(movie.Id);
+                dict.Add(movie.Id, actorDtos);
+            }
+         
+
+            var movieDtos = new List<MovieDto>();
+
+            foreach (var movie in moviesList)
+            {
+                foreach (var kvp in dict)
+                {
+                    if (movie.Id == kvp.Key )
+                    {
+                        movie.Actors = kvp.Value;
+                        movieDtos.Add(_mapper.Map<MovieDto>(movie));
+                    }
+                }
             }
 
             return movieDtos;
@@ -93,6 +112,18 @@ namespace Movie.Services
             }
 
             return movieDtos;
+        }
+
+        public List<ActorDto> GetActorsByMovie(int movieId)
+        {
+            var actorsList = _repo.GetActorsByMovie(movieId);
+            var actorDtos = new List<ActorDto>();
+            foreach (var movie in actorsList)
+            {
+                actorDtos.Add(_mapper.Map<ActorDto>(movie));
+            }
+
+            return actorDtos;
         }
     }
 

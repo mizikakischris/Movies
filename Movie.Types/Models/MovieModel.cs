@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Movie.Types.Dtos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,6 +29,8 @@ namespace Movie.Types.Models
         public byte[] Picture { get; set; }
 
         public virtual ICollection<MovieActor> MovieActors { get; set; }
+
+        public ICollection<ActorDto> Actors { get; set; }
 
     }
 }

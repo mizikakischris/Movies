@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Movie.Interfaces;
 using Movie.Repository.Data;
+using Movie.Types.Dtos;
 using Movie.Types.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace Movie.Repository
                     Movie = movie
 
                 };
-                _db.MovieActors.Add(movieActor);
+                _db.Add(movieActor);
             }
             _db.Movies.Add(movie);
             return Save();
@@ -40,6 +41,8 @@ namespace Movie.Repository
             return Save();
         }
 
+      
+
         public MovieModel GetMovieModel(int movieId)
         {
             return _db.Movies.FirstOrDefault(m => m.Id == movieId);
@@ -47,13 +50,33 @@ namespace Movie.Repository
 
         public ICollection<MovieModel> GetMovies()
         {
-            return _db.Movies.OrderBy(m=> m.Title).ToList();
+            return _db.Movies.Include(x=>x.MovieActors).OrderBy(m=> m.Title).ToList();
         }
 
         public List<MovieModel> GetMoviesByActor(int actorId)
         {
-            //var movies = _db.Movies.Include(x => x.Actor).Where(a => a.Actor.Id == actorId).ToList();
-            return null;
+            var movieActors = _db.MovieActors.Where(x => x.ActorId == actorId).ToList();
+            var movies = new List<MovieModel>();
+
+            foreach (var movieActor in movieActors)
+            {
+               var  movie = _db.Movies.Where(m => m.Id == movieActor.MovieId).FirstOrDefault();
+                movies.Add(movie);
+            }
+            return movies;
+        }
+
+        public List<Actor> GetActorsByMovie(int movieId)
+        {
+            var movieActors = _db.MovieActors.Where(x => x.MovieId == movieId).ToList();
+            var actors = new List<Actor>();
+
+            foreach (var movieActor in movieActors)
+            {
+                var actor = _db.Actors.Where(a => a.Id == movieActor.ActorId).FirstOrDefault();
+                actors.Add(actor);
+            }
+            return actors;
         }
 
         public bool  MovieModelExists(string name)

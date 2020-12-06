@@ -18,12 +18,15 @@ namespace Movie.Types.Dtos
 
         [Required]
         [Display(Name = "Last Name")]
+        [DataMember(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
         [Display(Name = "Date Of Birth")]
+        [DataMember(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
 
+        [DataMember(Name = "Picture")]
         public byte[] Picture { get; set; }
 
 
