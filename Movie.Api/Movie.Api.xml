@@ -52,7 +52,7 @@
             <param name="movieId"> The Id of the movie </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.MoviesController.CreateMovie(Movie.Types.Dtos.MovieDto)">
+        <member name="M:Movie.Api.Controllers.MoviesController.CreateMovie(Movie.Types.Dtos.MovieDto,System.Collections.Generic.List{System.Int32})">
             <summary>
             Create movie
             </summary>

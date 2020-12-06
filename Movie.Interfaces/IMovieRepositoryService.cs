@@ -9,7 +9,7 @@ namespace Movie.Interfaces
         MovieModel GetMovieModel(int movieId);
         bool MovieModelExists(string name);
         bool MovieModelExists(int id);
-        bool CreateMovieModel(MovieModel movie);
+        bool CreateMovieModel(MovieModel movie, List<int> actorIds);
         bool UpdateMovieModel(MovieModel movie);
         bool DeleteMovieModel(MovieModel movie);
         List<MovieModel> GetMoviesByActor(int actorId);

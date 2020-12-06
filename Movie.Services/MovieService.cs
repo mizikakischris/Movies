@@ -17,10 +17,12 @@ namespace Movie.Services
             _repo = repo;
             _mapper = mapper;
         }
-        public MovieModel CreateMovieModel(MovieDto movieDto)
+        public MovieModel CreateMovieModel(MovieDto movieDto, List<int> actorIds)
         {
+
+          
             var movieObj = _mapper.Map<MovieModel>(movieDto);
-            if (!_repo.CreateMovieModel(movieObj))
+            if (!_repo.CreateMovieModel(movieObj, actorIds))
             {
                 throw new Exception( $"Something went wrong when saving the record {movieObj.Title}");
                

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Movie.Interfaces;
 using Movie.Repository.Data;
 using Movie.Types.Models;
@@ -16,8 +17,19 @@ namespace Movie.Repository
             _db = db;
         }
 
-        public bool CreateMovieModel(MovieModel movie)
+        public bool CreateMovieModel([FromBody]MovieModel movie, [FromQuery]List<int> actorIds)
         {
+            var actors = _db.Actors.Where(a => actorIds.Contains(a.Id)).ToList();
+            foreach (var actor in actors)
+            {
+                var movieActor = new MovieActor()
+                {
+                    Actor = actor,
+                    Movie = movie
+
+                };
+                _db.MovieActors.Add(movieActor);
+            }
             _db.Movies.Add(movie);
             return Save();
         }

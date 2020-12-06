@@ -11,7 +11,7 @@ namespace Movie.Interfaces
         MovieDto GetMovieModel(int movieId);
         bool MovieModelExists(string name);
         bool MovieModelExists(int id);
-        MovieModel CreateMovieModel(MovieDto movieDto);
+        MovieModel CreateMovieModel(MovieDto movieDto, List<int> actorIds);
         bool UpdateMovieModel(MovieModel movie);
         bool DeleteMovieModel(MovieModel movie);
         bool Save();
