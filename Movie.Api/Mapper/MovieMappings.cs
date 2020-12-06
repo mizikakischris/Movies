@@ -13,6 +13,7 @@ namespace Movie.Api.MovieMapper
         public MovieMappings()
         {
             CreateMap<MovieModel, MovieDto>().ReverseMap();
+            CreateMap<Actor, ActorDto>().ReverseMap();
         }
        
     }

@@ -17,11 +17,11 @@
             <param name="actorId"> The Id of the actor </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.ActorController.CreateMovie(Movie.Types.Dtos.ActorDto)">
+        <member name="M:Movie.Api.Controllers.ActorController.CreateActor(Movie.Types.Dtos.ActorDto)">
             <summary>
-            create actor
+            Create actor
             </summary>
-            <param name="movieDto"> The Dto movie </param>
+            <param name="actorDto"> The Dto movie </param>
             <returns></returns>
         </member>
         <member name="M:Movie.Api.Controllers.ActorController.UpdateActor(System.Int32,Movie.Types.Dtos.ActorDto)">
@@ -54,7 +54,7 @@
         </member>
         <member name="M:Movie.Api.Controllers.MoviesController.CreateMovie(Movie.Types.Dtos.MovieDto)">
             <summary>
-            create movie
+            Create movie
             </summary>
             <param name="movieDto"> The Dto movie </param>
             <returns></returns>

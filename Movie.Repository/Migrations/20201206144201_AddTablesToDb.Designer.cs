@@ -10,8 +10,8 @@ using Movie.Repository.Data;
 namespace Movie.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201205204359_HeroActorRelationship")]
-    partial class HeroActorRelationship
+    [Migration("20201206144201_AddTablesToDb")]
+    partial class AddTablesToDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,16 +28,18 @@ namespace Movie.Repository.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("DateOfBirth")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<byte[]>("Picture")
                         .HasColumnType("varbinary(max)");
@@ -47,7 +49,7 @@ namespace Movie.Repository.Migrations
                     b.ToTable("Actors");
                 });
 
-            modelBuilder.Entity("Movie.Types.Models.Hero", b =>
+            modelBuilder.Entity("Movie.Types.Models.Character", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,9 +59,13 @@ namespace Movie.Repository.Migrations
                     b.Property<int>("ActorId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Hero")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<byte[]>("Picture")
                         .HasColumnType("varbinary(max)");
@@ -69,7 +75,22 @@ namespace Movie.Repository.Migrations
                     b.HasIndex("ActorId")
                         .IsUnique();
 
-                    b.ToTable("Hero");
+                    b.ToTable("Characters");
+                });
+
+            modelBuilder.Entity("Movie.Types.Models.MovieActor", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ActorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "ActorId");
+
+                    b.HasIndex("ActorId");
+
+                    b.ToTable("MovieActors");
                 });
 
             modelBuilder.Entity("Movie.Types.Models.MovieModel", b =>
@@ -79,43 +100,48 @@ namespace Movie.Repository.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ActorId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("BoxOffice")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Picture")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<DateTime>("ReleaseDate")
+                    b.Property<DateTime?>("ReleaseDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
-                    b.HasIndex("ActorId");
+                    b.HasKey("Id");
 
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("Movie.Types.Models.Hero", b =>
+            modelBuilder.Entity("Movie.Types.Models.Character", b =>
                 {
                     b.HasOne("Movie.Types.Models.Actor", "Actor")
-                        .WithOne("Hero")
-                        .HasForeignKey("Movie.Types.Models.Hero", "ActorId")
+                        .WithOne("Character")
+                        .HasForeignKey("Movie.Types.Models.Character", "ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Movie.Types.Models.MovieModel", b =>
+            modelBuilder.Entity("Movie.Types.Models.MovieActor", b =>
                 {
                     b.HasOne("Movie.Types.Models.Actor", "Actor")
-                        .WithMany()
-                        .HasForeignKey("ActorId");
+                        .WithMany("MovieActors")
+                        .HasForeignKey("ActorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Movie.Types.Models.MovieModel", "Movie")
+                        .WithMany("MovieActors")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

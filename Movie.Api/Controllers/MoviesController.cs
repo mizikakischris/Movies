@@ -89,7 +89,7 @@ namespace Movie.Api.Controllers
 
         }
 
-        [HttpGet("[action]/{movieId:int}")]
+        [HttpGet("[action]/{actorId:int}")]
         [ProducesResponseType(200, Type = typeof(MovieDto))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
@@ -135,7 +135,7 @@ namespace Movie.Api.Controllers
         }
 
         /// <summary>
-        /// create movie
+        /// Create movie
         /// </summary>
         /// <param name="movieDto"> The Dto movie </param>
         /// <returns></returns>
@@ -170,9 +170,9 @@ namespace Movie.Api.Controllers
                     {
                         BoxOffice = movieModel.BoxOffice,
                         Id = movieModel.Id,
-                        Name = movieModel.Name,
+                        Name = movieModel.Title,
                         Picture = movieModel.Picture,
-                        ReleaseDate = movieModel.ReleaseDate
+                        ReleaseDate = movieModel.ReleaseDate.Value
                     }
                 }
             };
@@ -199,7 +199,7 @@ namespace Movie.Api.Controllers
             var movieObj = _mapper.Map<MovieModel>(movieDto);
             if (!_service.UpdateMovieModel(movieObj))
             {
-                ModelState.AddModelError("", $"Something went wrong when updating the record {movieObj.Name}");
+                ModelState.AddModelError("", $"Something went wrong when updating the record {movieObj.Title}");
                 return StatusCode(500, ModelState);
             }
 
@@ -227,7 +227,7 @@ namespace Movie.Api.Controllers
             var movieObj = _service.GetTheMovieModel(movieId);
             if (!_service.DeleteMovieModel(movieObj))
             {
-                ModelState.AddModelError("", $"Something went wrong when deleting the record {movieObj.Name}");
+                ModelState.AddModelError("", $"Something went wrong when deleting the record {movieObj.Title}");
                 return StatusCode(500, ModelState);
             }
 

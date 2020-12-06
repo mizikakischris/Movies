@@ -22,7 +22,7 @@ namespace Movie.Services
             var movieObj = _mapper.Map<MovieModel>(movieDto);
             if (!_repo.CreateMovieModel(movieObj))
             {
-                throw new Exception( $"Something went wrong when saving the record {movieObj.Name}");
+                throw new Exception( $"Something went wrong when saving the record {movieObj.Title}");
                
             }
             return movieObj;

@@ -22,7 +22,7 @@ namespace Movie.Types.Dtos
 
         [Required]
         [Display(Name = "Date Of Birth")]
-        public decimal DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         public byte[] Picture { get; set; }
 
@@ -31,6 +31,6 @@ namespace Movie.Types.Dtos
         List<MovieModel> Movies { get; set; }
 
         //Reference Navigation Property
-        public Hero Hero { get; set; }
+        public Character Hero { get; set; }
     }
 }

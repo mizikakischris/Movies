@@ -35,18 +35,18 @@ namespace Movie.Repository
 
         public ICollection<MovieModel> GetMovies()
         {
-            return _db.Movies.OrderBy(m=> m.Name).ToList();
+            return _db.Movies.OrderBy(m=> m.Title).ToList();
         }
 
         public List<MovieModel> GetMoviesByActor(int actorId)
         {
-            var movies = _db.Movies.Include(x => x.Actor).Where(a => a.Actor.Id == actorId).ToList();
-            return movies;
+            //var movies = _db.Movies.Include(x => x.Actor).Where(a => a.Actor.Id == actorId).ToList();
+            return null;
         }
 
         public bool  MovieModelExists(string name)
         {
-            bool value = _db.Movies.Any(m => m.Name.ToLower().Trim() == name.ToLower().Trim());
+            bool value = _db.Movies.Any(m => m.Title.ToLower().Trim() == name.ToLower().Trim());
             return value;
         }
 

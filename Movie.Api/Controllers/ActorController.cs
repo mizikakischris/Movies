@@ -90,16 +90,16 @@ namespace Movie.Api.Controllers
         }
 
         /// <summary>
-        /// create actor
+        /// Create actor
         /// </summary>
-        /// <param name="movieDto"> The Dto movie </param>
+        /// <param name="actorDto"> The Dto movie </param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(ActorDto))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Response<ActorDto>> CreateMovie([FromBody] ActorDto actorDto)
+        public ActionResult<Response<ActorDto>> CreateActor([FromBody] ActorDto actorDto)
         {
             if (actorDto == null)
             {
@@ -124,7 +124,7 @@ namespace Movie.Api.Controllers
                     PayloadObject = new ActorDto
                     {
                         Id = actor.Id,
-                        Hero= actor.Hero,
+                        Hero= actor.Character,
                         LastName = actor.LastName,
                         Name = actor.Name,
                         Picture = actor.Picture,

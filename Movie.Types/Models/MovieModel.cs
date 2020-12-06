@@ -1,20 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Movie.Types.Models
 {
+    [Table("Movies")]
     public class MovieModel
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        [MaxLength(200, ErrorMessage = "Title can not be more than 200 characters")]
+        public string Title { get; set; }
 
         [Required]
         [Display(Name ="Release Date")]
-        public DateTime ReleaseDate{ get; set; }
+        public DateTime? ReleaseDate{ get; set; }
 
         [Required]
         [Display(Name = "Box Office")]
@@ -23,8 +27,7 @@ namespace Movie.Types.Models
 
         public byte[] Picture { get; set; }
 
+        public virtual ICollection<MovieActor> MovieActors { get; set; }
 
-       // [ForeignKey("Actor")]
-        public Actor Actor { get; set; }
     }
 }

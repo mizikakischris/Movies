@@ -52,6 +52,8 @@ namespace Movie.Api
         {
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepositoryService, MovieModelRepository>();
+            services.AddScoped<IActorService, ActorService>();
+            services.AddScoped<IActorRepositoryService, ActorRepository>();
         }
 
         private void RegisterSwagger(IServiceCollection services)

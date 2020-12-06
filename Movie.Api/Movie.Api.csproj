@@ -31,5 +31,9 @@
     <ProjectReference Include="..\Movie.Types\Movie.Types.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 
 </Project>
