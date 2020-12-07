@@ -34,7 +34,7 @@ namespace Movie.Api.Controllers
         public ActionResult<Response<MovieDto>> GetMovies()
         {
             var moviesList = _service.GetMovies();
-
+           
             Response<MovieDto> response = new Response<MovieDto>
             {
                 Payload = new Payload<MovieDto>
@@ -57,26 +57,14 @@ namespace Movie.Api.Controllers
         {
             try
             {
-
                 var movie = _service.GetMovieModel(movieId);
-                if (movie == null)
-                {
-                    throw new ErrorDetails
-                    {
-                        Description = $"Not found item with Id {movieId}",
-                        StatusCode = StatusCodes.Status404NotFound,
-                    };
-
-                }
-
+                ValidateMovie(movie: movie, movieId: movieId);
+               
                 Response<MovieDto> response = new Response<MovieDto>
                 {
-
                     Payload = new Payload<MovieDto> { PayloadObject = movie }
                 };
                 return Ok(response);
-
-
             }
             catch (ErrorDetails ex)
             {
@@ -98,20 +86,9 @@ namespace Movie.Api.Controllers
         {
             try
             {
-                var movieModels = _service.GetMoviesByActor(actorId);
-                if (movieModels == null)
-                {
-                    throw new ErrorDetails
-                    {
-                        Description = $"Movies Not found for Id {actorId}",
-                        StatusCode = StatusCodes.Status404NotFound,
-                    };
-                }
-                var movieDtos = new List<MovieDto>();
-                foreach (var movie in movieModels)
-                {
-                    movieDtos.Add(_mapper.Map<MovieDto>(movie));
-                }
+                var movieDtos = _service.GetMoviesByActor(actorId);
+                ValidateMovie(movieDtos: movieDtos, actorId: actorId);
+               
                 Response<MovieDto> response = new Response<MovieDto>
                 {
                     Payload = new Payload<MovieDto>
@@ -131,14 +108,13 @@ namespace Movie.Api.Controllers
                 };
                 return response;
             }
-
-
         }
 
         /// <summary>
         /// Create movie
         /// </summary>
         /// <param name="movieDto"> The Dto movie </param>
+        /// <param name="actorIds"> The actor Ids </param>
         /// <returns></returns>
         //api/movies?actorId=1&actorId=2&catId=1&catId=2
         [HttpPost]
@@ -255,14 +231,37 @@ namespace Movie.Api.Controllers
             }
         }
 
-        private StatusCodeResult ValidateMovie(List<int> actorsId,  MovieDto movie)
+        private StatusCodeResult ValidateMovie(MovieDto movie, int movieId) 
         {
-            if (movie == null || actorsId.Count() <= 0 )
+            if (movie == null)
             {
-                ModelState.AddModelError("", "Missing movie or actor");
-                return BadRequest();
+                throw new ErrorDetails
+                {
+                    Description = $"Not found item with Id {movieId}",
+                    StatusCode = StatusCodes.Status404NotFound,
+                };
+            }
+            return NoContent();
+                
+        }
+        private StatusCodeResult ValidateMovie(List<int> actorsId = null, MovieDto movie = null , List<MovieDto> movieDtos = null, int actorId = 0)
+        {
+            
+             if (movieDtos == null)
+            {
+                throw new ErrorDetails
+                {
+                    Description = $"Movies Not found for actor with Id {actorId}",
+                    StatusCode = StatusCodes.Status404NotFound,
+                };
             }
 
+            if (actorsId.Count() <= 0)
+            {
+                ModelState.AddModelError("", "Missing actor");
+                return BadRequest();
+            }
+            
 
             if (_service.MovieModelExists(movie.Title))
             {

@@ -57,6 +57,7 @@
             Create movie
             </summary>
             <param name="movieDto"> The Dto movie </param>
+            <param name="actorIds"> The actor Ids </param>
             <returns></returns>
         </member>
         <member name="M:Movie.Api.Controllers.MoviesController.UpdateMovie(System.Int32,Movie.Types.Dtos.MovieDto)">

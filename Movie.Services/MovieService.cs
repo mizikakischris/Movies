@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Movie.Api.Exceptions;
 using Movie.Interfaces;
 using Movie.Types.Dtos;
 using Movie.Types.Models;
@@ -40,6 +42,15 @@ namespace Movie.Services
         public MovieDto GetMovieModel(int movieId)
         {
             var movie =  _repo.GetMovieModel(movieId);
+            if (movie == null)
+            {
+                throw new ErrorDetails
+                {
+                    Description = $"Not found item with Id {movieId}",
+                    StatusCode = StatusCodes.Status404NotFound,
+                };
+
+            }
             var actorDtos = GetActorsByMovie(movie.Id);
             movie.Actors = actorDtos;
             var movieDto = _mapper.Map<MovieDto>(movie);
