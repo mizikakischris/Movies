@@ -40,6 +40,8 @@ namespace Movie.Services
         public MovieDto GetMovieModel(int movieId)
         {
             var movie =  _repo.GetMovieModel(movieId);
+            var actorDtos = GetActorsByMovie(movie.Id);
+            movie.Actors = actorDtos;
             var movieDto = _mapper.Map<MovieDto>(movie);
 
             return movieDto;

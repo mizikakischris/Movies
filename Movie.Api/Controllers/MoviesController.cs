@@ -220,22 +220,39 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult DeleteMovie(int movieId)
+        public ActionResult<Response<MovieDto>> DeleteMovie(int movieId)
         {
-            if (!_service.MovieModelExists(movieId))
+            try
             {
-                return NotFound();
-            }
+                if (!_service.MovieModelExists(movieId))
+                {
+                    throw new ErrorDetails
+                    {
+                        Description = $"Movies Not found for Id {movieId}",
+                        StatusCode = StatusCodes.Status404NotFound,
+                    };
+                }
 
-            var movieObj = _service.GetTheMovieModel(movieId);
-            if (!_service.DeleteMovieModel(movieObj))
+                var movieObj = _service.GetTheMovieModel(movieId);
+                if (!_service.DeleteMovieModel(movieObj))
+                {
+                    ModelState.AddModelError("", $"Something went wrong when deleting the record {movieObj.Title}");
+                    return StatusCode(500, ModelState);
+                }
+
+                return NoContent();
+            }
+            catch (ErrorDetails ex)
             {
-                ModelState.AddModelError("", $"Something went wrong when deleting the record {movieObj.Title}");
-                return StatusCode(500, ModelState);
+
+                Response<MovieDto> response = new Response<MovieDto>
+                {
+                    Payload = null,
+                    Exception = ex
+                };
+
+                return response;
             }
-
-            return NoContent();
-
         }
 
         private StatusCodeResult ValidateMovie(List<int> actorsId,  MovieDto movie)
