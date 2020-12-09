@@ -22,6 +22,7 @@ using Movie.Repository.Data;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Movie.Types;
 
 namespace Movie.Api
 {
