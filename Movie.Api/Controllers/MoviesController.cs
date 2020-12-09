@@ -8,6 +8,7 @@ using Movie.Interfaces;
 using Movie.Types.Responses;
 using AutoMapper;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Movie.Api.Controllers
 {
@@ -53,6 +54,7 @@ namespace Movie.Api.Controllers
         [HttpGet("{movieId:int}", Name = "GetMovie")]
         [ProducesResponseType(200, Type = typeof(MovieDto))]
         [ProducesResponseType(404)]
+        [Authorize]
         public ActionResult<Response<MovieDto>> GetMovie(int movieId)
         {
             try

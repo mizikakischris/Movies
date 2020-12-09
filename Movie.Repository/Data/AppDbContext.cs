@@ -18,6 +18,8 @@ namespace Movie.Repository.Data
 
         public virtual DbSet<MovieActor> MovieActors { get; set; }
 
+        public virtual DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MovieActor>()
