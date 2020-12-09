@@ -1,5 +1,5 @@
 ﻿
-namespace Movie.Api
+namespace Movie.Types
 {
     public class AppSettings
     {
