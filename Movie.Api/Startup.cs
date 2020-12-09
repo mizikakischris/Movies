@@ -19,6 +19,9 @@ using Movie.Services;
 using Movie.Interfaces;
 using Movie.Repository;
 using Movie.Repository.Data;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Movie.Api
 {
@@ -30,6 +33,7 @@ namespace Movie.Api
         }
 
         public IConfiguration Configuration { get; }
+        public byte[]? key;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -37,7 +41,29 @@ namespace Movie.Api
             RegisterGenericServices(services);
             RegisterApiServices(services);
             RegisterSwagger(services);
+            RegisterAuthentication(services);
             RegisterControllers(services);
+        }
+
+        private void RegisterAuthentication(IServiceCollection services)
+        {
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x => {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         private void RegisterGenericServices(IServiceCollection services)
@@ -47,6 +73,14 @@ namespace Movie.Api
               (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
            // services.AddScoped<ILogger, Logger>();
             services.AddAutoMapper(typeof(MovieMappings));
+
+
+            //AppSettings 
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            key = Encoding.ASCII.GetBytes(appSettings.Secret);
         }
 
         private void RegisterApiServices(IServiceCollection services)
@@ -55,6 +89,7 @@ namespace Movie.Api
             services.AddScoped<IMovieRepositoryService, MovieModelRepository>();
             services.AddScoped<IActorService, ActorService>();
             services.AddScoped<IActorRepositoryService, ActorRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         private void RegisterSwagger(IServiceCollection services)
@@ -112,7 +147,11 @@ namespace Movie.Api
                 options.RoutePrefix = "";
             });
             app.UseRouting();
-
+            app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
