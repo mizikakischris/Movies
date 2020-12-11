@@ -47,6 +47,7 @@ namespace Movie.Repository
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             user.Token = tokenHandler.WriteToken(token);
+            user.Password = String.Empty;
             return user;
         }
 
