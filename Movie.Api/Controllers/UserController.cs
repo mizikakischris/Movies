@@ -35,5 +35,23 @@ namespace Movie.Api.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] AuthenticationModel model)
+        {
+            bool ifUserNameUnique = _repo.IsUniqueUser(model.Username);
+            if (!ifUserNameUnique)
+            {
+                return BadRequest(new { message = "Username already exists" });
+            }
+            var user = _repo.Register(model.Username, model.Password);
+
+            if (user == null)
+            {
+                return BadRequest(new { message = "Error while registering" });
+            }
+
+            return Ok();
+        }
     }
 }
