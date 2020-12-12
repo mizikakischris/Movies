@@ -99,7 +99,7 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Response<ActorDto>> CreateActor([FromBody] ActorDto actorDto)
+        public ActionResult<Response<ActorDto>> CreateActor([FromBody] ActorDto actorDto, [FromQuery] List<int> movieIds)
         {
             if (actorDto == null)
             {
@@ -115,7 +115,7 @@ namespace Movie.Api.Controllers
                     Description = "Actor Exists..!"
                 };
             }
-            var actor = _service.CreateActor(actorDto);
+            var actor = _service.CreateActor(actorDto, movieIds);
             Response<ActorDto> response = new Response<ActorDto>
             {
 

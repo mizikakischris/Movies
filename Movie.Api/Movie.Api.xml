@@ -17,7 +17,7 @@
             <param name="actorId"> The Id of the actor </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.ActorsController.CreateActor(Movie.Types.Dtos.ActorDto)">
+        <member name="M:Movie.Api.Controllers.ActorsController.CreateActor(Movie.Types.Dtos.ActorDto,System.Collections.Generic.List{System.Int32})">
             <summary>
             Create actor
             </summary>

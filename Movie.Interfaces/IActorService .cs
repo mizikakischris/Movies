@@ -11,7 +11,7 @@ namespace Movie.Interfaces
         ActorDto GetActor(int actorId);
         bool ActorExists(string actorName);
         bool ActorExists(int actorId);
-        Actor CreateActor(ActorDto actor);
+        Actor CreateActor(ActorDto actor, List<int> movieIds);
         bool UpdateActor(Actor actor);
         bool DeleteActor(Actor actor);
         bool Save();

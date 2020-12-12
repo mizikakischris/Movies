@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Movie.Types.Dtos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -32,5 +33,8 @@ namespace Movie.Types.Models
 
         //Reference Navigation Property
         public virtual Character Character { get; set; }
+
+        [NotMapped]
+        public ICollection<MovieDto> Movies { get; set; }
     }
 }

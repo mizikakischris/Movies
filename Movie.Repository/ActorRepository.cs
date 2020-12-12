@@ -30,8 +30,19 @@ namespace Movie.Repository
            
         }
 
-        public bool CreateActor(Actor actor)
+        public bool CreateActor(Actor actor, List<int> movieIds)
         {
+            var movies = _db.Movies.Where(m => movieIds.Contains(m.Id)).ToList();
+            foreach (var movie in movies)
+            {
+                var movieActor = new MovieActor()
+                {
+                    Actor = actor,
+                    Movie = movie
+
+                };
+                _db.Add(movieActor);
+            }
             _db.Actors.Add(actor);
             return Save();
         }

@@ -30,6 +30,7 @@ namespace Movie.Types.Models
 
         public virtual ICollection<MovieActor> MovieActors { get; set; }
 
+        [NotMapped]
         public ICollection<ActorDto> Actors { get; set; }
 
     }

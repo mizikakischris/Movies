@@ -9,7 +9,7 @@ namespace Movie.Types.Dtos
     [DataContract]
     public class ActorDto
     {
-        
+        [DataMember(Name="Id")]
         public int Id { get; set; }
 
         [Required]
@@ -31,7 +31,8 @@ namespace Movie.Types.Dtos
 
 
         //An Actor can appear multiple times in the Movies table
-        List<MovieModel> Movies { get; set; }
+        [DataMember(Name = "Movies")]
+        public  List<MovieModel> Movies { get; set; }
 
         //Reference Navigation Property
         public Character Hero { get; set; }

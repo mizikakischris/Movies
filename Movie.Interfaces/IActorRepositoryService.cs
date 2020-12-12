@@ -10,7 +10,7 @@ namespace Movie.Interfaces
         Actor GetActor(int actorId);
         bool ActorExists(string actorName);
         bool ActorExists(int actorId);
-        bool CreateActor(Actor actor);
+        bool CreateActor(Actor actor, List<int> movieIds);
         bool UpdateActor(Actor actor);
         bool DeleteActor(Actor actor);
         bool Save();
