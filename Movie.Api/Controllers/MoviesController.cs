@@ -9,6 +9,7 @@ using Movie.Types.Responses;
 using AutoMapper;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace Movie.Api.Controllers
 {
@@ -19,10 +20,12 @@ namespace Movie.Api.Controllers
     {
         private readonly IMovieService _service;
         private readonly IMapper _mapper;
-        public MoviesController(IMovieService service, IMapper mapper)
+        private readonly ILogger _logger;
+        public MoviesController(IMovieService service, IMapper mapper, ILogger<MoviesController> logger)
         {
             _service = service;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -34,6 +37,7 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(200, Type = typeof(List<MovieDto>))]
         public ActionResult<Response<MovieDto>> GetMovies()
         {
+            _logger.LogWarning("Hello from GetMovies action");
             var moviesList = _service.GetMovies();
            
             Response<MovieDto> response = new Response<MovieDto>
@@ -70,6 +74,7 @@ namespace Movie.Api.Controllers
             }
             catch (ErrorDetails ex)
             {
+                _logger.LogError(ex.Description, ex);
                 Response<MovieDto> response = new Response<MovieDto>
                 {
                     Payload = null,
@@ -102,7 +107,7 @@ namespace Movie.Api.Controllers
             }
             catch (ErrorDetails ex)
             {
-
+                _logger.LogError(ex.Description, ex);
                 Response<MovieDto> response = new Response<MovieDto>
                 {
                     Payload = null,
@@ -151,6 +156,7 @@ namespace Movie.Api.Controllers
             }
             catch (ErrorDetails ex)
             {
+                _logger.LogError(ex.Description, ex);
                 Response<MovieDto> resp = new Response<MovieDto>
                 {
                     Payload = null,
@@ -172,20 +178,49 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult UpdateMovie(int movieId, [FromBody] MovieDto movieDto)
         {
-            if (movieDto == null || movieId != movieDto.Id)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (movieDto == null || movieId != movieDto.Id)
+                {
+                    throw new ErrorDetails
+                    {
+                        Description = $"Bad Request!",
+                        StatusCode = StatusCodes.Status400BadRequest,
+                    };
+                    
+                }
+                var movie = _service.GetMovieModel(movieId);
+               
+                var movieObj = _mapper.Map<MovieModel>(movieDto);
+                if (!_service.UpdateMovieModel(movieObj))
+                {
+                    ModelState.AddModelError("", $"Something went wrong when updating the record {movieObj.Title}");
+                    throw new ErrorDetails
+                    {
+                        Description = $"Something went wrong when updating the record {movieObj.Title}",
+                        StatusCode = StatusCodes.Status500InternalServerError,
+                    };
+                }
 
-            var movieObj = _mapper.Map<MovieModel>(movieDto);
-            if (!_service.UpdateMovieModel(movieObj))
+                return NoContent();
+            }
+            catch (ErrorDetails ex)
             {
-                ModelState.AddModelError("", $"Something went wrong when updating the record {movieObj.Title}");
-                return StatusCode(500, ModelState);
+                _logger.LogError(ex.StackTrace, ex);
+                var statusCode = ex.StatusCode;
+                switch (statusCode)      
+                {
+                    case StatusCodes.Status400BadRequest:
+                        Response<MovieDto> resp = new Response<MovieDto>
+                        {
+                            Payload = null,
+                            Exception = ex
+                        };
+                        return StatusCode(400, resp);
+                    default:
+                        return StatusCode(500, ex);
+                }
             }
-
-            return NoContent();
-
         }
 
         /// <summary>
@@ -222,7 +257,7 @@ namespace Movie.Api.Controllers
             }
             catch (ErrorDetails ex)
             {
-
+                _logger.LogError(ex.Description, ex);
                 Response<MovieDto> response = new Response<MovieDto>
                 {
                     Payload = null,

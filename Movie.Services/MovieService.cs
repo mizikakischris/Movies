@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Movie.Api.Exceptions;
 using Movie.Interfaces;
 using Movie.Types.Dtos;
@@ -44,8 +45,10 @@ namespace Movie.Services
             var movie =  _repo.GetMovieModel(movieId);
             if (movie == null)
             {
+                
                 throw new ErrorDetails
                 {
+                    
                     Description = $"Not found item with Id {movieId}",
                     StatusCode = StatusCodes.Status404NotFound,
                 };

@@ -73,7 +73,7 @@ namespace Movie.Api
             services.AddMvc();
             services.AddDbContext<AppDbContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            // services.AddScoped<ILogger, Logger>();
+            //services.AddSingleton<ILogger, Logger>();
             services.AddCors();
             services.AddAutoMapper(typeof(MovieMappings));
 
