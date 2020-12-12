@@ -13,11 +13,11 @@ namespace Movie.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public class ActorController : ControllerBase
+    public class ActorsController : ControllerBase
     {
         private readonly IActorService _service;
         private readonly IMapper _mapper;
-        public ActorController(IActorService service, IMapper mapper)
+        public ActorsController(IActorService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;

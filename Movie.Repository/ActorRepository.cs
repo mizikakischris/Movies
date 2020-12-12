@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Movie.Api.Exceptions;
+using Movie.Helpers;
 using Movie.Interfaces;
 using Movie.Repository.Data;
 using Movie.Types.Models;
@@ -11,6 +14,10 @@ namespace Movie.Repository
     {
         private readonly AppDbContext _db;
 
+        public ActorRepository(AppDbContext db)
+        {
+            _db = db;
+        }
         public bool ActorExists(string actorName)
         {
             bool value = _db.Actors.Any(a => a.Name.ToLower().Trim() == actorName.ToLower().Trim());
@@ -42,6 +49,10 @@ namespace Movie.Repository
 
         public List<Actor> GetActors()
         {
+
+            var actorsFromDb = _db.Actors.ToList();
+            Helper.ValidateActors(actorsFromDb);
+
             return _db.Actors.OrderBy(a => a.Name).ToList();
         }
 

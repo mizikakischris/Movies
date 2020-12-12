@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Movie.Helpers\Movie.Helpers.csproj" />
     <ProjectReference Include="..\Movie.Interfaces\Movie.Interfaces.csproj" />
   </ItemGroup>
 

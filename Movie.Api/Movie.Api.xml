@@ -4,27 +4,27 @@
         <name>Movie.Api</name>
     </assembly>
     <members>
-        <member name="M:Movie.Api.Controllers.ActorController.GetActors">
+        <member name="M:Movie.Api.Controllers.ActorsController.GetActors">
             <summary>
             Get list of actors.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.ActorController.GetActor(System.Int32)">
+        <member name="M:Movie.Api.Controllers.ActorsController.GetActor(System.Int32)">
             <summary>
             Get individual actor
             </summary>
             <param name="actorId"> The Id of the actor </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.ActorController.CreateActor(Movie.Types.Dtos.ActorDto)">
+        <member name="M:Movie.Api.Controllers.ActorsController.CreateActor(Movie.Types.Dtos.ActorDto)">
             <summary>
             Create actor
             </summary>
             <param name="actorDto"> The Dto movie </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.ActorController.UpdateActor(System.Int32,Movie.Types.Dtos.ActorDto)">
+        <member name="M:Movie.Api.Controllers.ActorsController.UpdateActor(System.Int32,Movie.Types.Dtos.ActorDto)">
             <summary>
             Update actor 
             </summary>
@@ -32,7 +32,7 @@
             <param name="actorDto"> The Dto actor </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.ActorController.DeleteActor(System.Int32)">
+        <member name="M:Movie.Api.Controllers.ActorsController.DeleteActor(System.Int32)">
             <summary>
             Delete individual actor
             </summary>
