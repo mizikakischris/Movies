@@ -1,15 +1,16 @@
-﻿using Movie.Types.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace Movie.Types.Dtos
 {
     [DataContract]
-    public class ActorDto
+   public class ActorsByMovieDto
     {
-        [DataMember(Name="Id")]
+
+        [DataMember(Name = "Id")]
         public int Id { get; set; }
 
         [Required]
@@ -29,8 +30,7 @@ namespace Movie.Types.Dtos
         [DataMember(Name = "Picture")]
         public byte[] Picture { get; set; }
 
-        //MoviesPlayedByActor
-        [DataMember(Name = "Movies")]
-        public List<MoviesByActorDto> Movies { get; set; }
+        [Required]
+        public int CharacterId { get; set; }
     }
 }

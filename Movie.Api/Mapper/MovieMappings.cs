@@ -14,6 +14,8 @@ namespace Movie.Api.MovieMapper
         {
             CreateMap<MovieModel, MovieDto>().ReverseMap();
             CreateMap<Actor, ActorDto>().ReverseMap();
+            CreateMap<MovieModel, MoviesByActorDto>().ReverseMap();
+            CreateMap<Actor, ActorsByMovieDto>().ReverseMap();
         }
        
     }

@@ -50,13 +50,13 @@ namespace Movie.Services
 
             return actor;
         }
-        //TODO 
+        
         public List<ActorDto> GetActors()
         {
             var actorsList =  _repo.GetActors();
             //Get movies by actorId
          
-            Dictionary<int, List<MovieDto>> dict = new Dictionary<int, List<MovieDto>>();
+            Dictionary<int, List<MoviesByActorDto>> dict = new Dictionary<int, List<MoviesByActorDto>>();
             foreach (var actor in actorsList)
             {
                var movieDtos =_movieService.GetMoviesByActor(actor.Id);

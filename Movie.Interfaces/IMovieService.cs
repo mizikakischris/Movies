@@ -18,8 +18,8 @@ namespace Movie.Interfaces
 
         MovieModel GetTheMovieModel(int movieId);
 
-        List<MovieDto> GetMoviesByActor(int actorId);
+        List<MoviesByActorDto> GetMoviesByActor(int actorId);
 
-        List<ActorDto> GetActorsByMovie(int movieId);
+        List<ActorsByMovieDto> GetActorsByMovie(int movieId);
     }
 }

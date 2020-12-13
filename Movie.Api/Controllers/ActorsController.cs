@@ -38,7 +38,7 @@ namespace Movie.Api.Controllers
             {
                 Payload = new Payload<ActorDto>
                 {
-                    PayloadObjects= actorsList
+                    Actors= actorsList
                 }
             };
             return Ok(response);
@@ -124,7 +124,7 @@ namespace Movie.Api.Controllers
                     PayloadObject = new ActorDto
                     {
                         Id = actor.Id,
-                        Hero= actor.Character,
+                       // Hero= actor.Character,
                         LastName = actor.LastName,
                         Name = actor.Name,
                         Picture = actor.Picture,

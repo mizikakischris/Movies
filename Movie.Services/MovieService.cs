@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Movie.Api.Exceptions;
 using Movie.Interfaces;
 using Movie.Types.Dtos;
@@ -54,8 +53,8 @@ namespace Movie.Services
                 };
 
             }
-            var actorDtos = GetActorsByMovie(movie.Id);
-            movie.Actors = actorDtos;
+            var actorByMovieDtos = GetActorsByMovie(movie.Id);
+            movie.Actors = actorByMovieDtos;
             var movieDto = _mapper.Map<MovieDto>(movie);
 
             return movieDto;
@@ -71,8 +70,8 @@ namespace Movie.Services
         public List<MovieDto> GetMovies()
         {
             var moviesList =  _repo.GetMovies();
-            //With movie Id I get the actors when swarching the movieActors table
-            Dictionary<int, List<ActorDto>> dict = new Dictionary<int, List<ActorDto>>();
+            //With movie Id I get the actors when searching the movieActors (intermediate table)
+            Dictionary<int, List<ActorsByMovieDto>> dict = new Dictionary<int, List<ActorsByMovieDto>>();
             foreach (var movie in moviesList)
             {
                 var actorDtos = GetActorsByMovie(movie.Id);
@@ -118,25 +117,25 @@ namespace Movie.Services
             return _repo.UpdateMovieModel(movie);
         }
 
-        public List<MovieDto> GetMoviesByActor(int actorId)
+        public List<MoviesByActorDto> GetMoviesByActor(int actorId)
         {
             var moviesList = _repo.GetMoviesByActor(actorId);
-            var movieDtos = new List<MovieDto>();
+            var movieDtos = new List<MoviesByActorDto>();
             foreach (var movie in moviesList)
             {
-                movieDtos.Add(_mapper.Map<MovieDto>(movie));
+                movieDtos.Add(_mapper.Map<MoviesByActorDto>(movie));
             }
 
             return movieDtos;
         }
 
-        public List<ActorDto> GetActorsByMovie(int movieId)
+        public List<ActorsByMovieDto> GetActorsByMovie(int movieId)
         {
             var actorsList = _repo.GetActorsByMovie(movieId);
-            var actorDtos = new List<ActorDto>();
+            var actorDtos = new List<ActorsByMovieDto>();
             foreach (var movie in actorsList)
             {
-                actorDtos.Add(_mapper.Map<ActorDto>(movie));
+                actorDtos.Add(_mapper.Map<ActorsByMovieDto>(movie));
             }
 
             return actorDtos;

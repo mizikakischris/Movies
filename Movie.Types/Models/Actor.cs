@@ -35,6 +35,6 @@ namespace Movie.Types.Models
         public virtual Character Character { get; set; }
 
         [NotMapped]
-        public ICollection<MovieDto> Movies { get; set; }
+        public ICollection<MoviesByActorDto> Movies { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace Movie.Api.Controllers
             {
                 Payload = new Payload<MovieDto>
                 {
-                    PayloadObjects = moviesList
+                    Movies = moviesList
                 }
             };
             return Ok(response);
@@ -85,37 +85,37 @@ namespace Movie.Api.Controllers
 
         }
 
-        [HttpGet("[action]/{actorId:int}")]
-        [ProducesResponseType(200, Type = typeof(MovieDto))]
-        [ProducesResponseType(404)]
-        [ProducesDefaultResponseType]
-        public ActionResult<Response<MovieDto>> GetMoviesByActor(int actorId)
-        {
-            try
-            {
-                var movieDtos = _service.GetMoviesByActor(actorId);
-                ValidateMovie(movieDtos: movieDtos, actorId: actorId);
+        //[HttpGet("[action]/{actorId:int}")]
+        //[ProducesResponseType(200, Type = typeof(MovieDto))]
+        //[ProducesResponseType(404)]
+        //[ProducesDefaultResponseType]
+        //public ActionResult<Response<MoviesByActor>> GetMoviesByActor(int actorId)
+        //{
+        //    try
+        //    {
+        //        var movieDtos = _service.GetMoviesByActor(actorId);
+        //        ValidateMovie(moviesByActorDtos: movieDtos, actorId: actorId);
                
-                Response<MovieDto> response = new Response<MovieDto>
-                {
-                    Payload = new Payload<MovieDto>
-                    {
-                        PayloadObjects = movieDtos
-                    }
-                };
-                return Ok(response);
-            }
-            catch (ErrorDetails ex)
-            {
-                _logger.LogError(ex.Description, ex);
-                Response<MovieDto> response = new Response<MovieDto>
-                {
-                    Payload = null,
-                    Exception = ex
-                };
-                return response;
-            }
-        }
+        //        Response<MoviesByActor> response = new Response<MoviesByActor>
+        //        {
+        //            Payload = new Payload<MoviesByActor>
+        //            {
+        //                PayloadObjects = movieDtos
+        //            }
+        //        };
+        //        return Ok(response);
+        //    }
+        //    catch (ErrorDetails ex)
+        //    {
+        //        _logger.LogError(ex.Description, ex);
+        //        Response<MovieDto> response = new Response<MovieDto>
+        //        {
+        //            Payload = null,
+        //            Exception = ex
+        //        };
+        //        return response;
+        //    }
+        //}
 
         /// <summary>
         /// Create movie
@@ -281,10 +281,10 @@ namespace Movie.Api.Controllers
             return NoContent();
                 
         }
-        private StatusCodeResult ValidateMovie(List<int> actorsId = null, MovieDto movie = null , List<MovieDto> movieDtos = null, int actorId = 0)
+        private StatusCodeResult ValidateMovie(List<int> actorsId = null, MovieDto movie = null , List<MoviesByActorDto> moviesByActorDtos = null, int actorId = 0)
         {
             
-             if (movieDtos == null)
+             if (moviesByActorDtos == null)
             {
                 throw new ErrorDetails
                 {
