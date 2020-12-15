@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Movie.Repository.Migrations
 {
-    public partial class AddTablesToDb : Migration
+    public partial class Initiate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,6 +37,21 @@ namespace Movie.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
+                    Role = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +100,39 @@ namespace Movie.Repository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Actors",
+                columns: new[] { "Id", "DateOfBirth", "LastName", "Name", "Picture" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(1965, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "Downey", "Robert", null },
+                    { 2, new DateTime(1981, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "Evans", "Chris", null },
+                    { 3, new DateTime(1981, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "EvansNew", "ChrisNew", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Movies",
+                columns: new[] { "Id", "BoxOffice", "Picture", "ReleaseDate", "Title" },
+                values: new object[] { 1, 2798000000m, null, new DateTime(2019, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "Avengers: EndGame" });
+
+            migrationBuilder.InsertData(
+                table: "Characters",
+                columns: new[] { "Id", "ActorId", "Hero", "Name", "Picture" },
+                values: new object[,]
+                {
+                    { 17, 1, "Super Hero", "Ironman", null },
+                    { 18, 2, "Super Hero", "Captain America", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MovieActors",
+                columns: new[] { "MovieId", "ActorId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 1, 2 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Characters_ActorId",
                 table: "Characters",
@@ -104,6 +152,9 @@ namespace Movie.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "MovieActors");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Actors");

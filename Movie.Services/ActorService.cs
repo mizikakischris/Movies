@@ -70,10 +70,21 @@ namespace Movie.Services
                 {
                     if (actor.Id == kvp.Key)
                     {
-                        actor.Movies = kvp.Value;
                         actorDtos.Add(_mapper.Map<ActorDto>(actor));
                     }
                 }
+            }
+
+            foreach (var actorDto in actorDtos)
+            {
+                foreach (var kvp in dict)
+                {
+                    if (actorDto.Id == kvp.Key)
+                    {
+                        actorDto.Movies = kvp.Value;
+                    }
+                }
+
             }
 
             return actorDtos;

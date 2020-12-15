@@ -27,5 +27,6 @@ namespace Movie.Types.Dtos
 
         [DataMember(Name = "Actors")]
         public ICollection<ActorsByMovieDto> Actors { get; set; }
+
     }
 }

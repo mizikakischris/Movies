@@ -53,9 +53,15 @@ namespace Movie.Services
                 };
 
             }
-            var actorByMovieDtos = GetActorsByMovie(movie.Id);
-            movie.Actors = actorByMovieDtos;
+            var actors = GetActorsByMovie(movie.Id);
+            var actorDtos = new List<ActorsByMovieDto>();
+            foreach (var actor in actors)
+            {
+                actorDtos.Add(_mapper.Map<ActorsByMovieDto>(actor));
+            }
+
             var movieDto = _mapper.Map<MovieDto>(movie);
+            movieDto.Actors = actorDtos;
 
             return movieDto;
         }
@@ -74,7 +80,12 @@ namespace Movie.Services
             Dictionary<int, List<ActorsByMovieDto>> dict = new Dictionary<int, List<ActorsByMovieDto>>();
             foreach (var movie in moviesList)
             {
-                var actorDtos = GetActorsByMovie(movie.Id);
+                var actors = GetActorsByMovie(movie.Id);
+                var actorDtos = new List<ActorsByMovieDto>();
+                foreach (var actor in actors)
+                {
+                    actorDtos.Add(_mapper.Map<ActorsByMovieDto>(actor));
+                }
                 dict.Add(movie.Id, actorDtos);
             }
          
@@ -87,10 +98,21 @@ namespace Movie.Services
                 {
                     if (movie.Id == kvp.Key )
                     {
-                        movie.Actors = kvp.Value;
                         movieDtos.Add(_mapper.Map<MovieDto>(movie));
                     }
                 }
+            }
+
+            foreach (var movieDto in movieDtos)
+            {
+                foreach (var kvp in dict)
+                {
+                    if (movieDto.Id == kvp.Key)
+                    {
+                        movieDto.Actors = kvp.Value;
+                    }
+                }
+                 
             }
 
             return movieDtos;
@@ -129,16 +151,11 @@ namespace Movie.Services
             return movieDtos;
         }
 
-        public List<ActorsByMovieDto> GetActorsByMovie(int movieId)
+        public List<Actor> GetActorsByMovie(int movieId)
         {
-            var actorsList = _repo.GetActorsByMovie(movieId);
-            var actorDtos = new List<ActorsByMovieDto>();
-            foreach (var movie in actorsList)
-            {
-                actorDtos.Add(_mapper.Map<ActorsByMovieDto>(movie));
-            }
-
-            return actorDtos;
+            var actors = _repo.GetActorsByMovie(movieId);
+          
+            return actors;
         }
     }
 

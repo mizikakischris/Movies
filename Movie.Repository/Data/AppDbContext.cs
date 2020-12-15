@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Movie.Types.Models;
+using System;
 
 namespace Movie.Repository.Data
 {
@@ -7,7 +8,7 @@ namespace Movie.Repository.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            Database.Migrate();
+            //Database.Migrate();
         }
 
         public virtual DbSet<MovieModel> Movies { get; set; }
@@ -37,6 +38,8 @@ namespace Movie.Repository.Data
               .WithOne(b => b.Actor)
               .HasForeignKey<Character>(c => c.ActorId);
 
+
+            modelBuilder.Seed();
         }
     }
 }

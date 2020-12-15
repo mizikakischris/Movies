@@ -34,7 +34,5 @@ namespace Movie.Types.Models
         //Reference Navigation Property
         public virtual Character Character { get; set; }
 
-        [NotMapped]
-        public ICollection<MoviesByActorDto> Movies { get; set; }
     }
 }

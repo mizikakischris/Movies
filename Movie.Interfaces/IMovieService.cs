@@ -20,6 +20,6 @@ namespace Movie.Interfaces
 
         List<MoviesByActorDto> GetMoviesByActor(int actorId);
 
-        List<ActorsByMovieDto> GetActorsByMovie(int movieId);
+        List<Actor> GetActorsByMovie(int movieId);
     }
 }

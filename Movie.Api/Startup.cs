@@ -124,14 +124,14 @@ namespace Movie.Api
                     {
                      new  OpenApiSecurityScheme
                      { 
-                     Reference = new OpenApiReference
+                       Reference = new OpenApiReference
                      { 
                      Type = ReferenceType.SecurityScheme,
-                     Id= "Bearer"
+                       Id= "Bearer"
                      
                      },
-                     Scheme = "oath2",
-                     Name = "Bearer",
+                       Scheme = "oath2",
+                       Name = "Bearer",
                      In = ParameterLocation.Header,
                      },
                      new List<string>()
@@ -161,7 +161,7 @@ namespace Movie.Api
             .AddApplicationPart(typeof(MoviesController).Assembly);
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -184,7 +184,6 @@ namespace Movie.Api
             .AllowAnyHeader());
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

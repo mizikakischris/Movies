@@ -10,8 +10,8 @@ using Movie.Repository.Data;
 namespace Movie.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201209225250_AddUserToDb")]
-    partial class AddUserToDb
+    [Migration("20201215193123_Initiate")]
+    partial class Initiate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,42 +20,6 @@ namespace Movie.Repository.Migrations
                 .HasAnnotation("ProductVersion", "3.1.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Movie.Types.Dtos.ActorDto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("HeroId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MovieModelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Picture")
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HeroId");
-
-                    b.HasIndex("MovieModelId");
-
-                    b.ToTable("ActorDto");
-                });
 
             modelBuilder.Entity("Movie.Types.Models.Actor", b =>
                 {
@@ -83,6 +47,29 @@ namespace Movie.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Actors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateOfBirth = new DateTime(1965, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Downey",
+                            Name = "Robert"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateOfBirth = new DateTime(1981, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Evans",
+                            Name = "Chris"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DateOfBirth = new DateTime(1981, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "EvansNew",
+                            Name = "ChrisNew"
+                        });
                 });
 
             modelBuilder.Entity("Movie.Types.Models.Character", b =>
@@ -112,6 +99,22 @@ namespace Movie.Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Characters");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 17,
+                            ActorId = 1,
+                            Hero = "Super Hero",
+                            Name = "Ironman"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            ActorId = 2,
+                            Hero = "Super Hero",
+                            Name = "Captain America"
+                        });
                 });
 
             modelBuilder.Entity("Movie.Types.Models.MovieActor", b =>
@@ -127,6 +130,18 @@ namespace Movie.Repository.Migrations
                     b.HasIndex("ActorId");
 
                     b.ToTable("MovieActors");
+
+                    b.HasData(
+                        new
+                        {
+                            MovieId = 1,
+                            ActorId = 1
+                        },
+                        new
+                        {
+                            MovieId = 1,
+                            ActorId = 2
+                        });
                 });
 
             modelBuilder.Entity("Movie.Types.Models.MovieModel", b =>
@@ -154,6 +169,15 @@ namespace Movie.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BoxOffice = 2798000000m,
+                            ReleaseDate = new DateTime(2019, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Avengers: EndGame"
+                        });
                 });
 
             modelBuilder.Entity("Movie.Types.Models.User", b =>
@@ -175,17 +199,6 @@ namespace Movie.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Movie.Types.Dtos.ActorDto", b =>
-                {
-                    b.HasOne("Movie.Types.Models.Character", "Hero")
-                        .WithMany()
-                        .HasForeignKey("HeroId");
-
-                    b.HasOne("Movie.Types.Models.MovieModel", null)
-                        .WithMany("Actors")
-                        .HasForeignKey("MovieModelId");
                 });
 
             modelBuilder.Entity("Movie.Types.Models.Character", b =>

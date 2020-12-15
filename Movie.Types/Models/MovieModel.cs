@@ -29,9 +29,5 @@ namespace Movie.Types.Models
         public byte[] Picture { get; set; }
 
         public virtual ICollection<MovieActor> MovieActors { get; set; }
-
-        [NotMapped]
-        public ICollection<ActorsByMovieDto> Actors { get; set; }
-
     }
 }
