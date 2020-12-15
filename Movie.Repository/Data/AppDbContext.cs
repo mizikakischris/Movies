@@ -39,7 +39,7 @@ namespace Movie.Repository.Data
               .HasForeignKey<Character>(c => c.ActorId);
 
 
-            modelBuilder.Seed();
+           // modelBuilder.Seed();
         }
     }
 }
