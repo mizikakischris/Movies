@@ -7,6 +7,8 @@ using Movie.Types.Models;
 using Movie.Interfaces;
 using Movie.Types.Responses;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace Movie.Api.Controllers
 {
@@ -16,11 +18,15 @@ namespace Movie.Api.Controllers
     public class ActorsController : ControllerBase
     {
         private readonly IActorService _service;
+        private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
-        public ActorsController(IActorService service, IMapper mapper)
+        private readonly ILogger _logger;
+        public ActorsController(IActorService service, IMapper mapper, ILogger<ActorsController> logger, IMovieService movieService)
         {
             _service = service;
             _mapper = mapper;
+            _logger = logger;
+            _movieService = movieService;
         }
 
 
@@ -93,6 +99,7 @@ namespace Movie.Api.Controllers
         /// Create actor
         /// </summary>
         /// <param name="actorDto"> The Dto movie </param>
+        /// <param name="movieIds"> The actor Ids </param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(ActorDto))]
@@ -101,38 +108,41 @@ namespace Movie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Response<ActorDto>> CreateActor([FromBody] ActorDto actorDto, [FromQuery] List<int> movieIds)
         {
-            if (actorDto == null)
+            try
             {
-                return BadRequest(ModelState);
-            }
-            if (_service.ActorExists(actorDto.Name))
-            {
-                //ModelState.AddModelError("", "Movie Exists!");
-                //return StatusCode(404, ModelState);
-                throw new ErrorDetails
+                ValidatActor(actorDto, movieIds);
+               
+                var actor = _service.CreateActor(actorDto, movieIds);
+                Response<ActorDto> response = new Response<ActorDto>
                 {
-                    StatusCode = 404,
-                    Description = "Actor Exists..!"
+
+                    Payload = new Payload<ActorDto>
+                    {
+                        PayloadObject = new ActorDto
+                        {
+                            Id = actor.Id,
+                            // Hero= actor.Character,
+                            LastName = actor.LastName,
+                            Name = actor.Name,
+                            Picture = actor.Picture,
+                            DateOfBirth = actor.DateOfBirth
+                        }
+                    }
                 };
+                return CreatedAtRoute("GetActor", new { actorId = actor.Id }, response);
             }
-            var actor = _service.CreateActor(actorDto, movieIds);
-            Response<ActorDto> response = new Response<ActorDto>
+            catch (ErrorDetails ex)
             {
 
-                Payload = new Payload<ActorDto>
+                _logger.LogError(ex.Description, ex);
+                Response<ActorDto> resp = new Response<ActorDto>
                 {
-                    PayloadObject = new ActorDto
-                    {
-                        Id = actor.Id,
-                       // Hero= actor.Character,
-                        LastName = actor.LastName,
-                        Name = actor.Name,
-                        Picture = actor.Picture,
-                        DateOfBirth = actor.DateOfBirth
-                    }
-                }
-            };
-            return CreatedAtRoute("GetActor", new { actorId = actor.Id }, response);
+                    Payload = null,
+                    Exception = ex
+                };
+                return resp;
+            }
+            
         }
 
         /// <summary>
@@ -189,6 +199,49 @@ namespace Movie.Api.Controllers
 
             return NoContent();
 
+        }
+
+        private StatusCodeResult ValidatActor(ActorDto actorDto, [FromQuery] List<int> movieIds)
+        {
+            if (movieIds.Count() <= 0)
+            {
+                throw new ErrorDetails
+                {
+                    Description = $"Movie(s) Not found. Enter valid movie.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                };
+            }
+
+            foreach (var movieId in movieIds)
+            {
+                if (!_movieService.MovieModelExists(movieId))
+                {
+                    throw new ErrorDetails
+                    {
+                        Description = $"Movies Not found for Id {movieId}",
+                        StatusCode = StatusCodes.Status404NotFound,
+                    };
+                }
+            }
+            
+            if (actorDto == null)
+            {
+                throw new ErrorDetails
+                {
+                    Description = $"Fill actor details again.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                };
+            }
+
+            if (_service.ActorExists(actorDto.Name))
+            {
+                throw new ErrorDetails
+                {
+                    StatusCode = 404,
+                    Description = "Actor Exists..!"
+                };
+            }
+            return NoContent();
         }
     }
 }

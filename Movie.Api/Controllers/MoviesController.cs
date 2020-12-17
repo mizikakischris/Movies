@@ -281,17 +281,17 @@ namespace Movie.Api.Controllers
             return NoContent();
                 
         }
-        private StatusCodeResult ValidateMovie(List<int> actorsId = null, MovieDto movie = null , List<MoviesByActorDto> moviesByActorDtos = null, int actorId = 0)
+        private StatusCodeResult ValidateMovie(List<int> actorsId = null, MovieDto movie = null)
         {
             
-             if (moviesByActorDtos == null)
-            {
-                throw new ErrorDetails
-                {
-                    Description = $"Movies Not found for actor with Id {actorId}",
-                    StatusCode = StatusCodes.Status404NotFound,
-                };
-            }
+            // if (moviesByActorDtos == null)
+            //{
+            //    throw new ErrorDetails
+            //    {
+            //        Description = $"Movies Not found for actor with Id {actorId}",
+            //        StatusCode = StatusCodes.Status404NotFound,
+            //    };
+            //}
 
             if (actorsId.Count() <= 0)
             {

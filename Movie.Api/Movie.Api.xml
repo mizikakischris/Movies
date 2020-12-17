@@ -22,6 +22,7 @@
             Create actor
             </summary>
             <param name="actorDto"> The Dto movie </param>
+            <param name="movieIds"> The actor Ids </param>
             <returns></returns>
         </member>
         <member name="M:Movie.Api.Controllers.ActorsController.UpdateActor(System.Int32,Movie.Types.Dtos.ActorDto)">
