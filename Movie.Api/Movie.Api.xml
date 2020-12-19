@@ -53,14 +53,6 @@
             <param name="movieId"> The Id of the movie </param>
             <returns></returns>
         </member>
-        <member name="M:Movie.Api.Controllers.MoviesController.CreateMovie(Movie.Types.Dtos.MovieDto,System.Collections.Generic.List{System.Int32})">
-            <summary>
-            Create movie
-            </summary>
-            <param name="movieDto"> The Dto movie </param>
-            <param name="actorIds"> The actor Ids </param>
-            <returns></returns>
-        </member>
         <member name="M:Movie.Api.Controllers.MoviesController.UpdateMovie(System.Int32,Movie.Types.Dtos.MovieDto)">
             <summary>
             Update individual movie

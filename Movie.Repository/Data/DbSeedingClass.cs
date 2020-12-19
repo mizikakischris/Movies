@@ -8,55 +8,6 @@ namespace Movie.Repository.Data
     public static class DbSeedingClass
     {
 
-        //public static void SeedDataContext(this AppDbContext context)
-        //{
-        //    var movieActors = new List<MovieActor>()
-        //    {
-        //         new MovieActor
-        //         {
-        //             Movie= new MovieModel
-        //              {
-        //                    Title = "Avengers: EndGame",
-        //                    ReleaseDate = new DateTime(2019,4,25),
-        //                    BoxOffice = 2798000000
-        //              },
-        //             Actor = new Actor
-        //              {
-        //                   Name = "Robert",
-        //                   LastName = "Downey",
-        //                   DateOfBirth = new DateTime(1965,04,04),
-        //                   Character = new Character
-        //                   {
-        //                      Hero = "Ironman",
-        //                   }
-        //              }
-        //         },
-        //         new MovieActor
-        //         {
-        //             Movie= new MovieModel
-        //             {
-        //                    Title = "Avengers: EndGame",
-        //                    ReleaseDate = new DateTime(2019,4,25),
-        //                    BoxOffice = 2798000000
-        //             },
-        //             Actor = new Actor
-        //             {
-        //                   Name = "Chris",
-        //                   LastName = "Evans",
-        //                   DateOfBirth = new DateTime(1981,06,13),
-        //                   Character = new Character
-        //                   {
-        //                      Hero = "Captain America",
-        //                   }
-        //             }
-        //         }
-
-        //    };
-
-        //    context.MovieActors.AddRange(movieActors);
-        //    context.SaveChanges();
-        //}
-
         public static void Seed (this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MovieActor>()

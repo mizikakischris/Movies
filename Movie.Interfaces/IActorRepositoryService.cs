@@ -6,7 +6,6 @@ namespace Movie.Interfaces
     public interface IActorRepositoryService
     {
          List<Actor> GetActors();
-      
         Actor GetActor(int actorId);
         bool ActorExists(string actorName);
         bool ActorExists(int actorId);

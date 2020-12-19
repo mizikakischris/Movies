@@ -13,13 +13,11 @@ namespace Movie.Services
     {
 
         private readonly IMovieRepositoryService _repo;
-        private readonly IActorRepositoryService _actorRepo;
         private readonly IMapper _mapper;
-        public MovieService(IMovieRepositoryService repo, IMapper mapper, IActorRepositoryService actorRepo)
+        public MovieService(IMovieRepositoryService repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
-            _actorRepo = actorRepo;
         }
         public MovieModel CreateMovieModel(MovieDto movieDto, List<int> actorIds)
         {
@@ -76,6 +74,7 @@ namespace Movie.Services
         public List<MovieDto> GetMovies()
         {
             var moviesList =  _repo.GetMovies();
+
             //With movie Id I get the actors when searching the movieActors (intermediate table)
             Dictionary<int, List<ActorsByMovieDto>> dict = new Dictionary<int, List<ActorsByMovieDto>>();
             foreach (var movie in moviesList)

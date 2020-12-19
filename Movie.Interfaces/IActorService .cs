@@ -15,7 +15,6 @@ namespace Movie.Interfaces
         bool UpdateActor(Actor actor);
         bool DeleteActor(Actor actor);
         bool Save();
-
         Actor GetTheActor(int movieId);
     }
 }

@@ -110,7 +110,7 @@ namespace Movie.Api.Controllers
         {
             try
             {
-                ValidatActor(actorDto, movieIds);
+                ValidateActor(actorDto, movieIds);
                
                 var actor = _service.CreateActor(actorDto, movieIds);
                 Response<ActorDto> response = new Response<ActorDto>
@@ -121,7 +121,6 @@ namespace Movie.Api.Controllers
                         PayloadObject = new ActorDto
                         {
                             Id = actor.Id,
-                            // Hero= actor.Character,
                             LastName = actor.LastName,
                             Name = actor.Name,
                             Picture = actor.Picture,
@@ -168,9 +167,7 @@ namespace Movie.Api.Controllers
                 ModelState.AddModelError("", $"Something went wrong when updating the record {actorObj.Name}");
                 return StatusCode(500, ModelState);
             }
-
             return NoContent();
-
         }
 
         /// <summary>
@@ -201,7 +198,7 @@ namespace Movie.Api.Controllers
 
         }
 
-        private StatusCodeResult ValidatActor(ActorDto actorDto, [FromQuery] List<int> movieIds)
+        private StatusCodeResult ValidateActor(ActorDto actorDto, [FromQuery] List<int> movieIds)
         {
             if (movieIds.Count() <= 0)
             {

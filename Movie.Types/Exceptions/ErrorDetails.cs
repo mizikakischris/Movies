@@ -11,11 +11,5 @@ namespace Movie.Api.Exceptions
 		public int StatusCode { get; set; }
 		[DataMember(Name = "description")]
 		public string Description { get; set; }
-
-
-		//public override string ToString()
-		//{
-		//	return JsonConvert.SerializeObject(this);
-		//}
 	}
 }
