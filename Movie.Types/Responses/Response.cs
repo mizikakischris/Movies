@@ -26,26 +26,6 @@ namespace Movie.Types.Responses
     {
         public T PayloadObject;
         public List<T> Movies { get; set; }
-        //{
-        //    set
-        //    {
-        //        Type typeParameterType = typeof(T);
-        //        if (typeParameterType == typeof(MovieDto))
-        //        {
-        //            Response<T> obj = new Response<T>();
-        //            obj.GetType().InvokeMember("PayloadObjects",
-        //            BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
-        //            Type.DefaultBinder, this, new string[] { "Movies" });
-        //            var res = String.Empty;
-        //            //    PropertyInfo prop = this.GetType().GetProperty("PayloadObjects", BindingFlags.Public | BindingFlags.Instance);
-        //            //    //if (null != prop && prop.CanWrite)
-        //            //    //{
-        //            //        prop.SetValue(this, "Movies", null);
-        //            //    //}
-        //        }
-        //    }
-        //    get { return this.PayloadObjects; }
-        //}
         public List<T> Actors { get; set; }
     }
 }
