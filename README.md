@@ -38,7 +38,7 @@ In the text input below enter 'Bearer' [space] and then your token
 ```
 Example: "Bearer 12345678f "
 ```
-You can use Postman collection and environment to test the endpoints. Open fileExplorer and navigate to the the project.Open folder **..Movies\Docs\Postman**
+You can use Postman collection and environment to test the endpoints. Open fileExplorer and navigate to the project.Open folder **..Movies\Docs\Postman**
 
 
 
